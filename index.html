@@ -7,39 +7,70 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap">
+      <script src="data.js"></script>
       <title>Merry-Christmas</title>
    </head>
    <body>
       <div id="root"></div>
       <script type="text/babel">
-      const container = document.getElemenById('root');
-      const root = reactDom.createRoot(container);
-      root.render(<App/>);
+         const container = document.getElemenById('root');
+         const root = reactDom.createRoot(container);
+         root.render(<App words = {words} selectedItems={selectedItems} finishedItems={finishedItems} />);
 
-      function App() {
-         return (
-            <section className='game'>
-               <ul className="cards">
-                  <Card type="text" text="Kannettava"/> 
-                  <CardImage url="img/photo-card-5.jpg"/>
-                  <CardImage url="img/photo-card-6.jpg"/>
-                  <Card type="image" url="img/photo-card-2.jpg"/>
-                  <Card type="text" text="Kannettava"/>
-                  <Card type="text" text="Kannettava"/>
-                  <Card type="text" text="Kannettava"/>
-                  <Card type="text" text="Kannettava"/>
-                  <Card type="text" text="Kannettava"/>
-                  <Card type="image" url="img/photo-card-2.jpg"/>
-                  <Card type="image" url="img/photo-card-2.jpg"/>
-                  <Card type="image" url="img/photo-card-2.jpg"/>
-                  </ul>
+         function App({words = [], selectedItems = []} ) {
+            return (
+               <section className = 'game'>
+                  <Grid words = {words} selectedItems = {selectedItems} finishedItems = {finishedItems} />
                </section>
             );
          }
+/* Компонент список карточек  */
+            function Grid( {words, selectedItems, FinishedItems}) {
+               const words = [
+               { type: 'image', url: 'img/photo-card-1.jpg' },
+               { type: 'image', url: 'img/photo-card-2.jpg' },
+               { type: 'word', text: 'first word' },
+               { type: 'word', text: 'second word' },
+            ];
+            const cards = words.map((item) => (
+                  <Card 
+                     key={item.id}
+                     type = {item.type}
+                     url ={item.url}
+                     text = {item.text}
+                     isSelected = {selectedItems.includes(item.id)}
+                     isFinished = {finishedItems.includes(item.id)}
+                  />
+               ));
+            return (
+               <section className='game'>
+                  <ul className="cards">
+                     <Card type="text" text="Kannettava"/> 
+                     <CardImage url="img/photo-card-5.jpg"/>
+                     <CardImage url="img/photo-card-6.jpg"/>
+                     <Card type="image" url="img/photo-card-2.jpg"/>
+                     <Card type="text" text="Kannettava"/>
+                     <Card type="text" text="Kannettava"/>
+                     <Card type="text" text="Kannettava"/>
+                     <Card type="text" text="Kannettava"/>
+                     <Card type="text" text="Kannettava"/>
+                     <Card type="image" url="img/photo-card-2.jpg"/>
+                     <Card type="image" url="img/photo-card-2.jpg"/>
+                     <Card type="image" url="img/photo-card-2.jpg"/>
+                     </ul>
+                  </section>
+               );
+         }
+/* Компонент карточка */
          function Card({url, text, type}) {
             const content = type === 'image' 
             ? <img src={url} width="185" height="100" alt=""/>
-            : <span>{text}</span>
+            : <span>{text}</span>;
+            const className = `card ${
+               isSelected ? 'selected' : ''
+            } ${
+               isFinished ? 'disabled' : ''
+            }`;
             return (
                <li className="card">
                   {content}
